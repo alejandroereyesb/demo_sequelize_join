@@ -40,8 +40,9 @@ const obtenerUnAutorYTodasSusEntradas = async (req, res) => {
         const { idAuthor } = req.body;
         const query = await Autores.findAll({
             include: {
-                model: Entradas,
-                where: { idAuthor },
+                model: Entradas, //Entradas es el modelo que se va a incluir
+                where: { idAuthor }, //Se filtra por el id del autor
+                as: 'entradas', //Alias para la relación, definido en associations
             }
         })
         res.status(200).json(query);

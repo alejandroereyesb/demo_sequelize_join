@@ -12,6 +12,7 @@ Before using this api you must connect a PostgreSQL database.
 ```
 SQL_PASSWORD=
 SQL_HOST=
+SQL_DATABASE=
 SQL_USER=
 ```
 Once the database is connected you must populate the tables by making the following http requests: 
@@ -142,9 +143,12 @@ const Autores = require('./autores');
 const Entradas = require('./entradas');
 
 //Define the relation between Schemas
-Autores.hasMany(Entradas, { foreignKey: 'idAuthor' });//{foreignKey:'id_author'} works as well 
+//Declare the relationship between the two tables. Relationships are always reciprocal. 
+//as is an alias for the relationship, this alias will be used later in the query. 
+Autores.hasMany(Entradas, { foreignKey: 'idAuthor', as: "entradas" });//{foreignKey:'id_author'} works as well 
+Entradas.belongsTo(Autores, { foreignKey: 'idAuthor' });
 
-// this file must be required in the entry point before the connection
+// this file must be required in the entry point (index.js) before the connection
 ```
 More on [associations](https://sequelize.org/docs/v6/core-concepts/assocs/).
 
@@ -182,10 +186,9 @@ const obtenerUnAutorYTodasSusEntradas = async (req, res) => {
         const query = await Autores.findAll({
             // call the data in the other table
             include: {
-                // refer the model
-                model: Entradas,
-                // refer the Foreign Key in the other model
-                where: { idAuthor },
+                model: Entradas, //Entradas is the model to be included
+                where: { idAuthor }, //Query will filted by idAuthor
+                as: 'entradas', //Alias for the relationship as declared in the association.
             }
         })
         res.status(200).json(query);
