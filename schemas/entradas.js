@@ -34,6 +34,5 @@ const Entradas = db.define("Entradas", {
 });
 
 
-Entradas.sync();
 
 module.exports = Entradas;

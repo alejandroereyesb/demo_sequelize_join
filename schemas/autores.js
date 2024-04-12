@@ -36,7 +36,7 @@ const Autores = db.define("Autores", {
 );
 
 
-Autores.sync();
+
 
 module.exports = Autores;
 

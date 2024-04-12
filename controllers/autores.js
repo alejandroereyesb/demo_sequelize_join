@@ -59,6 +59,7 @@ const obtenerTodosLosAutoresConSusEntradas = async (req, res) => {
         const query = await Autores.findAll({
             include: {
                 model: Entradas,
+                as: 'entradas'
             }
         })
         res.status(200).json(query);
